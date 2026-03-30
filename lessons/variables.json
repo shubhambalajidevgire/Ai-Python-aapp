@@ -1,0 +1,6 @@
+{
+  "title": "Python Variables",
+  "explanation": "Variables are used to store data in Python.",
+  "example": "x = 10\nname = 'Alice'\nprint(x)\nprint(name)",
+  "exercise": "Create a variable called age and print it."
+}

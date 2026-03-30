@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Code Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <button onclick="runCode()">Run</button>
+
+    <button onclick="alert('Save feature coming soon 🚀')">Save</button>
+
+    <button onclick="alert('Open feature coming soon 🚀')">Open</button>
+
+    <button onclick="alert('Debug feature coming soon 🚀')">Debug</button>
+
+    <button onclick="runCode()">Output</button>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+
+    <!-- CODE EDITOR -->
+    <div class="editor-panel">
+        <textarea id="code-editor" placeholder="Your code will appear here..."></textarea>
+    </div>
+
+    <!-- AI PANEL -->
+    <div class="ai-panel">
+
+        <div class="chat-history" id="chat-history">
+            <div class="ai-message" id="ai-response">
+                👋 Hi! Ask me to generate code.
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="prompt-input" placeholder="Type your prompt..." />
+            <button onclick="sendPrompt()">Send</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- OUTPUT MODAL -->
+<div id="output-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeOutput()">&times;</span>
+        <h3>Output</h3>
+        <pre id="output-text"></pre>
+    </div>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
