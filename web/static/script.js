@@ -10,11 +10,6 @@ function sendPrompt() {
 
     const prompt = document.getElementById("prompt-input").value;
 
-    if (!prompt) {
-        alert("Please enter a prompt");
-        return;
-    }
-
     fetch("/process", {
         method: "POST",
         headers: {
@@ -22,42 +17,53 @@ function sendPrompt() {
         },
         body: JSON.stringify({ prompt: prompt })
     })
-    .then(res => res.json())
+    .then(res => {
+        // 🔥 Handle non-JSON (important fix)
+        if (!res.ok) {
+            throw new Error("Server error");
+        }
+        return res.json();
+    })
     .then(data => {
 
         console.log(data);
 
+        // ✅ Chat history
+        let chat = document.getElementById("chat-history");
+
+        if (chat) {
+            let msg = document.createElement("div");
+            msg.className = "ai-message";
+            msg.innerText = data.message;
+
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        // ✅ Optional response box
         let aiBox = document.getElementById("ai-response");
-let chat = document.getElementById("chat-history");
+        if (aiBox) {
+            aiBox.innerText = data.message;
+        }
 
-let msg = document.createElement("div");
-msg.className = "ai-message";
-msg.innerText = data.message;
+        // ✅ Code editor
+        let editor = document.getElementById("code-editor");
 
-chat.appendChild(msg);
-chat.scrollTop = chat.scrollHeight;
+        if (editor) {
+            if (editor.value.trim() === "") {
+                editor.value = data.code;
+            } else {
+                editor.value += "\n\n# --- New Code ---\n" + data.code;
+            }
+            editor.focus();
+        }
 
-if (aiBox) {
-    aiBox.innerText = data.message;
-}
-
-let editor = document.getElementById("code-editor");
-
-if (editor.value.trim() === "") {
-    editor.value = data.code;
-} else {
-    editor.value += "\n\n# --- New Code ---\n" + data.code;
-}
-
-editor.focus();                 // optional
-
-        // 🔥 CLEAR INPUT AFTER SUCCESS
+        // ✅ Clear input
         document.getElementById("prompt-input").value = "";
-
-        document.getElementById("prompt-input").focus();
- })
-    .catch(err => {
-        alert("Error: " + err);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Error: " + error.message);
     });
 }
 
