@@ -11,6 +11,7 @@ class Controller:
 
     def process_prompt(self, user_input):
 
+        is_simple = any(word in text for word in simple_keywords)
         text = user_input.lower()
 
         # Intent detection
