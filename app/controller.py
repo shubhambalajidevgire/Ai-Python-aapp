@@ -2,6 +2,8 @@
 # CONTROLLER CLASS
 # =========================
 
+from database import save_log
+
 class Controller:
 
     def __init__(self):
@@ -18,6 +20,12 @@ class Controller:
             intent = "addition"
         else:
             intent = "unknown"
+
+        if is_simple:
+            save_log(user_input, "simple")
+        else:
+            save_log(user_input, "complex")
+
 
         # Generate code
         if intent == "loop":

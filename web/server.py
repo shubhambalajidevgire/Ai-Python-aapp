@@ -1,6 +1,7 @@
 import sys
 import os
 
+
 # 🔥 Fix import path (VERY IMPORTANT)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -15,6 +16,9 @@ import tempfile
 app = Flask(__name__)
 ctrl = Controller()
 
+from database import init_db
+
+init_db()
 
 # =========================
 # HOME PAGE
@@ -38,6 +42,20 @@ def process():
     return jsonify(result)
 
 
+
+@app.route("/logs", methods=["GET"])
+def get_logs():
+    import sqlite3
+
+    conn = sqlite3.connect("app.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM logs ORDER BY id DESC")
+    data = cursor.fetchall()
+
+    conn.close()
+
+    return jsonify(data)
 # =========================
 # RUN CODE ROUTE
 # =========================
@@ -58,7 +76,7 @@ def run_code():
 
         # Execute code
         result = subprocess.run(
-            ["python", file_name],
+            ["python3", file_name],
             capture_output=True,
             text=True,
             timeout=5
@@ -76,4 +94,5 @@ def run_code():
 # START SERVER
 # =========================
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
