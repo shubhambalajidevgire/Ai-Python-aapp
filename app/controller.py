@@ -9,24 +9,27 @@ class Controller:
     def __init__(self):
         pass
 
-    def process_prompt(self, user_input):
+def process_prompt(self, user_input):
 
-        is_simple = any(word in text for word in simple_keywords)
-        text = user_input.lower()
+    text = user_input.lower()
 
-        # Intent detection
-        if "loop" in text:
-            intent = "loop"
-        elif "add" in text or "sum" in text:
-            intent = "addition"
-        else:
-            intent = "unknown"
+    simple_keywords = ["loop", "add", "sum", "print"]
 
-        if is_simple:
-            save_log(user_input, "simple")
-        else:
-            save_log(user_input, "complex")
+    is_simple = any(word in text for word in simple_keywords)
 
+    # Intent detection
+    if "loop" in text:
+        intent = "loop"
+    elif "add" in text or "sum" in text:
+        intent = "addition"
+    else:
+        intent = "unknown"
+
+    # Logging
+    if is_simple:
+        save_log(user_input, "simple")
+    else:
+        save_log(user_input, "complex")
 
         # Generate code
         if intent == "loop":
